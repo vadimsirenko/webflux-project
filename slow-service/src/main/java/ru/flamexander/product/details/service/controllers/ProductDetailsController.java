@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.flamexander.product.details.service.dtos.ProductDetailsDto;
+import ru.flamexander.product.details.service.exceptions.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/details")
@@ -14,7 +15,9 @@ public class ProductDetailsController {
         if (id > 100) {
             throw new RuntimeException();
         }
-        Thread.sleep(2500 + (int)(Math.random() * 2500));
-        return new ProductDetailsDto(id, "Product description..");
+        if (id % 2 == 0)
+            throw new ResourceNotFoundException();
+        Thread.sleep(2500 + (int) (Math.random() * 2500));
+        return new ProductDetailsDto(id, String.format("Product %d description..", id));
     }
 }
